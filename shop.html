@@ -16,6 +16,7 @@
     .logo {
       width: 120px;
       margin-bottom: 10px;
+      cursor: pointer;
     }
 
     h1 {
@@ -96,11 +97,16 @@
   </style>
 </head>
 <body>
-  <img src="discordbot_logo.png" alt="Logo" class="logo" />
+  <!-- Klikbaar logo -->
+  <a href="index.html">
+    <img src="discordbot_logo.png" alt="Logo" class="logo" />
+  </a>
+  
   <h1>🛍️ Shop onze Discord Bots</h1>
 
   <div class="bot-container" id="botContainer"></div>
 
+  <!-- Popup Modal -->
   <div id="botModal" class="modal">
     <div class="modal-content">
       <h3 id="modalTitle"></h3>
@@ -109,6 +115,7 @@
     </div>
   </div>
 
+  <!-- Bots laden vanuit bots.js -->
   <script src="bots.js"></script>
   <script>
     const container = document.getElementById("botContainer");
@@ -118,7 +125,7 @@
 
     function showModal(bot) {
       modalTitle.innerText = `${bot.emoji} ${bot.name}`;
-      modalDesc.innerText = bot.fullDescription + "\n\nPrijs: " + bot.price;
+      modalDesc.innerText = `${bot.fullDescription}\n\n💰 Prijs: ${bot.price}`;
       modal.style.display = "flex";
     }
 
