@@ -6,28 +6,59 @@
   <title>Discord Bot Winkel</title>
   <style>
     body {
-      font-family: sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       background-color: #1e1e2f;
       color: white;
       text-align: center;
       padding: 20px;
     }
+
     .logo {
       width: 120px;
       margin-bottom: 10px;
     }
+
+    h1 {
+      margin-bottom: 30px;
+      color: #ffc107;
+    }
+
+    .bot-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
     .bot-card {
       background: #2d2d44;
       padding: 20px;
       border-radius: 12px;
       margin: 10px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-      cursor: pointer;
+      transition: transform 0.2s ease;
     }
-    .bot-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
+
+    .bot-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .bot-card h3 {
+      margin-top: 0;
+    }
+
+    .info-btn {
+      background-color: #5865f2;
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      margin-top: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .info-btn:hover {
+      background-color: #4752c4;
     }
 
     /* Modal styles */
@@ -40,14 +71,23 @@
       justify-content: center;
       align-items: center;
       z-index: 1000;
+      animation: fadeIn 0.3s ease-in-out;
     }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
     .modal-content {
       background: #2d2d44;
       padding: 20px;
       border-radius: 12px;
       width: 90%;
       max-width: 400px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.4);
     }
+
     .close-btn {
       background: #ff4444;
       color: white;
@@ -56,51 +96,12 @@
       border-radius: 8px;
       margin-top: 10px;
       cursor: pointer;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
   <img src="discordbot_logo.png" alt="Logo" class="logo" />
-  <h1>Shop onze Discord Bots</h1>
+  <h1>🛍️ Shop onze Discord Bots</h1>
 
-  <div class="bot-container" id="botContainer"></div>
-
-  <!-- Modal -->
-  <div class="modal" id="botModal">
-    <div class="modal-content">
-      <h2 id="modalName"></h2>
-      <p><strong>Prijs:</strong> <span id="modalPrice"></span></p>
-      <p id="modalDescription"></p>
-      <button class="close-btn" onclick="closeModal()">Sluiten</button>
-    </div>
-  </div>
-
-  <script src="bots.js"></script>
-  <script>
-    const container = document.getElementById("botContainer");
-    const modal = document.getElementById("botModal");
-    const modalName = document.getElementById("modalName");
-    const modalPrice = document.getElementById("modalPrice");
-    const modalDescription = document.getElementById("modalDescription");
-
-    bots.forEach(bot => {
-      const card = document.createElement("div");
-      card.className = "bot-card";
-      card.innerHTML = `<h3>${bot.name}</h3><p>${bot.price}</p>`;
-      card.onclick = () => showBotDetails(bot);
-      container.appendChild(card);
-    });
-
-    function showBotDetails(bot) {
-      modalName.textContent = bot.name;
-      modalPrice.textContent = bot.price;
-      modalDescription.textContent = bot.fullDescription || bot.description;
-      modal.style.display = "flex";
-    }
-
-    function closeModal() {
-      modal.style.display = "none";
-    }
-  </script>
-</body>
-</html>
+  <div class="bot-container
