@@ -3,143 +3,68 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Discord Bot Winkel</title>
+  <title>Welkom bij Discord Bots</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #071725; /* Donkerblauw, exact als je logo */
+      background-color: #071725;
       color: white;
+      font-family: 'Segoe UI', sans-serif;
       text-align: center;
-      padding: 20px;
+      padding: 40px 20px;
     }
 
     .logo {
-      width: 120px;
-      margin-bottom: 10px;
-      cursor: pointer;
+      width: 140px;
+      margin-bottom: 20px;
     }
 
     h1 {
-      margin-bottom: 30px;
+      font-size: 2em;
+      margin-bottom: 10px;
       color: #ffc107;
     }
 
-    .bot-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
+    p {
+      font-size: 1.1em;
+      color: #cfd8dc;
+      max-width: 600px;
+      margin: 0 auto 30px;
     }
 
-    .bot-card {
-      background: #0e2439;
-      padding: 20px;
-      border-radius: 12px;
-      margin: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-      transition: transform 0.2s ease;
-    }
-
-    .bot-card:hover {
-      transform: translateY(-5px);
-    }
-
-    .bot-card h3 {
-      margin-top: 0;
-    }
-
-    .info-btn {
+    .shop-button {
       background-color: #5865f2;
       color: white;
-      padding: 10px 16px;
       border: none;
-      border-radius: 8px;
-      margin-top: 10px;
+      padding: 14px 24px;
+      border-radius: 10px;
+      font-size: 1.1em;
       cursor: pointer;
+      text-decoration: none;
       font-weight: bold;
+      transition: background-color 0.2s ease;
     }
 
-    .info-btn:hover {
+    .shop-button:hover {
       background-color: #4752c4;
     }
 
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-
-    .modal-content {
-      background: #0e2439;
-      padding: 20px;
-      border-radius: 12px;
-      width: 90%;
-      max-width: 400px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.4);
-      text-align: left;
-    }
-
-    .close-btn {
-      background: #ff4444;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      margin-top: 10px;
-      cursor: pointer;
-      font-weight: bold;
+    footer {
+      margin-top: 50px;
+      color: #78909c;
+      font-size: 0.9em;
     }
   </style>
 </head>
 <body>
-  <a href="index.html">
-    <img src="discordbot_logo.png" alt="Logo" class="logo" />
-  </a>
+  <img src="discordbot_logo.png" alt="Logo" class="logo" />
 
-  <h1>🛍️ Shop onze Discord Bots</h1>
+  <h1>Welkom bij mijn Discord Bot Shop 👋</h1>
+  <p>Hier verkoop ik gebruiksklare én op maat gemaakte Discord bots. Klik hieronder om de bots te bekijken of toe te voegen aan je server.</p>
 
-  <div class="bot-container" id="botContainer"></div>
+  <a href="shop.html" class="shop-button">🛍️ Ga naar de Shop</a>
 
-  <div id="botModal" class="modal">
-    <div class="modal-content">
-      <h3 id="modalTitle"></h3>
-      <p id="modalDesc"></p>
-      <button class="close-btn" onclick="closeModal()">Sluiten</button>
-    </div>
-  </div>
-
-  <script src="bots.js"></script>
-  <script>
-    const container = document.getElementById("botContainer");
-    const modal = document.getElementById("botModal");
-    const modalTitle = document.getElementById("modalTitle");
-    const modalDesc = document.getElementById("modalDesc");
-
-    function showModal(bot) {
-      modalTitle.innerText = `${bot.emoji} ${bot.name}`;
-      modalDesc.innerText = `${bot.fullDescription}\n\n💰 Prijs: ${bot.price}`;
-      modal.style.display = "flex";
-    }
-
-    function closeModal() {
-      modal.style.display = "none";
-    }
-
-    bots.forEach(bot => {
-      const card = document.createElement("div");
-      card.className = "bot-card";
-      card.innerHTML = `
-        <h3>${bot.emoji} ${bot.name}</h3>
-        <p>${bot.description}</p>
-        <p><strong>💸 ${bot.price}</strong></p>
-        <button class="info-btn" onclick='showModal(${JSON.stringify(bot)})'>ℹ️ Meer info</button>
-      `;
-      container.appendChild(card);
-    });
-  </script>
+  <footer>
+    <p>📩 Contact via Discord: <a href="https://discord.gg/XjZhuZNEHS" style="color:#58a6ff;">discord.gg/XjZhuZNEHS</a></p>
+  </footer>
 </body>
-  </html>
+</html>
