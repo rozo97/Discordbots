@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #0d0d1a; /* Precies dezelfde kleur als het logo */
+      background-color: #071725; /* Donkerblauw, exact als je logo */
       color: white;
       text-align: center;
       padding: 20px;
@@ -31,7 +31,7 @@
     }
 
     .bot-card {
-      background: #2d2d44;
+      background: #0e2439;
       padding: 20px;
       border-radius: 12px;
       margin: 10px;
@@ -74,7 +74,7 @@
     }
 
     .modal-content {
-      background: #2d2d44;
+      background: #0e2439;
       padding: 20px;
       border-radius: 12px;
       width: 90%;
@@ -136,10 +136,10 @@
         <h3>${bot.emoji} ${bot.name}</h3>
         <p>${bot.description}</p>
         <p><strong>💸 ${bot.price}</strong></p>
-        <button class="info-btn" onclick='showModal(${JSON.stringify(bot)})'>Meer info</button>
+        <button class="info-btn" onclick='showModal(${JSON.stringify(bot)})'>ℹ️ Meer info</button>
       `;
       container.appendChild(card);
     });
   </script>
 </body>
-</html>
+  </html>
