@@ -1,40 +1,26 @@
 const bots = [
   {
-    naam: "🎫 Ticket Bot",
-    prijs: "Gratis",
-    beschrijving: "Eenvoudig ticketsysteem met knoppen en logs. Ideaal voor supportkanalen.",
-    link: "https://discord.gg/XjZhuZNEHS"
+    name: "Ticket Bot",
+    price: "Gratis",
+    description: "Simpel ticket systeem",
+    fullDescription: "Deze bot biedt een volledig ticket systeem met knopreacties, logs en automatische sluiting van tickets. Ideaal voor support servers."
   },
   {
-    naam: "🎉 Giveaway Bot",
-    prijs: "Gratis",
-    beschrijving: "Start giveaways via slash commands, kies tijd, aantal winnaars en meer!",
-    link: "https://discord.gg/XjZhuZNEHS"
+    name: "Giveaway Bot",
+    price: "Gratis",
+    description: "Start en beheer giveaways",
+    fullDescription: "Start giveaways via slash commands, met automatische eindtijd, herrolling en logs. Makkelijk te gebruiken en veilig tegen spam."
   },
   {
-    naam: "📈 Level Bot",
-    prijs: "€5",
-    beschrijving: "Gebruikers krijgen XP en stijgen in level op basis van activiteit. Optioneel leaderboard.",
-    link: "https://discord.gg/XjZhuZNEHS"
+    name: "Level Bot",
+    price: "€5",
+    description: "Level systeem op berichten",
+    fullDescription: "Gebruikers verdienen XP op basis van activiteit. Je kunt rollen koppelen aan levels, en de bot bevat een leaderboard en XP-configuratie."
   },
   {
-    naam: "🤖 Custom Bot",
-    prijs: "Vanaf €10",
-    beschrijving: "Jij vraagt, ik bouw. 1 commando: €10–50 | 10+ commando’s: €100–200. Volledig op maat!",
-    link: "https://discord.gg/XjZhuZNEHS"
+    name: "Custom Bot",
+    price: "€10–€200",
+    description: "Op maat gemaakte bots",
+    fullDescription: "Een volledig op maat gemaakte bot met 1 tot 20 commando’s of functies. Je kiest wat hij doet, ik bouw het. Prijs op basis van complexiteit."
   }
 ];
-
-// Automatisch vullen
-const container = document.getElementById("shop");
-bots.forEach(bot => {
-  const div = document.createElement("div");
-  div.className = "product";
-  div.innerHTML = `
-    <h2>${bot.naam}</h2>
-    <p>${bot.beschrijving}</p>
-    <div class="price">💰 ${bot.prijs}</div>
-    <a href="${bot.link}" class="discord">👥 Bestellen via Discord</a>
-  `;
-  container.appendChild(div);
-});
