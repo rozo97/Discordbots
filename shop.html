@@ -71,12 +71,6 @@
       justify-content: center;
       align-items: center;
       z-index: 1000;
-      animation: fadeIn 0.3s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
     }
 
     .modal-content {
@@ -86,6 +80,7 @@
       width: 90%;
       max-width: 400px;
       box-shadow: 0 0 15px rgba(0,0,0,0.4);
+      text-align: left;
     }
 
     .close-btn {
@@ -104,4 +99,44 @@
   <img src="discordbot_logo.png" alt="Logo" class="logo" />
   <h1>🛍️ Shop onze Discord Bots</h1>
 
-  <div class="bot-container
+  <div class="bot-container" id="botContainer"></div>
+
+  <div id="botModal" class="modal">
+    <div class="modal-content">
+      <h3 id="modalTitle"></h3>
+      <p id="modalDesc"></p>
+      <button class="close-btn" onclick="closeModal()">Sluiten</button>
+    </div>
+  </div>
+
+  <script src="bots.js"></script>
+  <script>
+    const container = document.getElementById("botContainer");
+    const modal = document.getElementById("botModal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalDesc = document.getElementById("modalDesc");
+
+    function showModal(bot) {
+      modalTitle.innerText = `${bot.emoji} ${bot.name}`;
+      modalDesc.innerText = bot.fullDescription + "\n\nPrijs: " + bot.price;
+      modal.style.display = "flex";
+    }
+
+    function closeModal() {
+      modal.style.display = "none";
+    }
+
+    bots.forEach(bot => {
+      const card = document.createElement("div");
+      card.className = "bot-card";
+      card.innerHTML = `
+        <h3>${bot.emoji} ${bot.name}</h3>
+        <p>${bot.description}</p>
+        <p><strong>💸 ${bot.price}</strong></p>
+        <button class="info-btn" onclick='showModal(${JSON.stringify(bot)})'>Meer info</button>
+      `;
+      container.appendChild(card);
+    });
+  </script>
+</body>
+</html>
