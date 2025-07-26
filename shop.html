@@ -1,62 +1,106 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bot Shop</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Discord Bot Winkel</title>
   <style>
     body {
-      margin: 0;
-      background-color: #0d1117;
+      font-family: sans-serif;
+      background-color: #1e1e2f;
       color: white;
-      font-family: Arial, sans-serif;
       text-align: center;
+      padding: 20px;
     }
-    header {
-      padding: 1rem;
-      border-bottom: 1px solid #30363d;
+    .logo {
+      width: 120px;
+      margin-bottom: 10px;
     }
-    h1 {
-      color: #58a6ff;
+    .bot-card {
+      background: #2d2d44;
+      padding: 20px;
+      border-radius: 12px;
+      margin: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      cursor: pointer;
     }
-    .product {
-      background-color: #161b22;
-      margin: 1rem auto;
-      padding: 1rem;
-      border-radius: 8px;
-      max-width: 500px;
-      border: 1px solid #30363d;
+    .bot-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
     }
-    .product h2 {
-      color: #79c0ff;
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
     }
-    .product p {
-      color: #c9d1d9;
+    .modal-content {
+      background: #2d2d44;
+      padding: 20px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
     }
-    .price {
-      font-weight: bold;
-      margin-top: 0.5rem;
-      color: #3fb950;
-    }
-    a.discord {
-      text-decoration: none;
-      color: #ffffff;
-      background-color: #5865F2;
+    .close-btn {
+      background: #ff4444;
+      color: white;
       padding: 10px 20px;
-      border-radius: 6px;
-      display: inline-block;
-      margin-top: 1rem;
+      border: none;
+      border-radius: 8px;
+      margin-top: 10px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>🛍️ Mijn Discord Bot Shop</h1>
-    <p><a href="index.html" style="color:#58a6ff;">⬅ Terug naar home</a></p>
-  </header>
+  <img src="discordbot_logo.png" alt="Logo" class="logo" />
+  <h1>Shop onze Discord Bots</h1>
 
-  <div id="shop"></div>
+  <div class="bot-container" id="botContainer"></div>
+
+  <!-- Modal -->
+  <div class="modal" id="botModal">
+    <div class="modal-content">
+      <h2 id="modalName"></h2>
+      <p><strong>Prijs:</strong> <span id="modalPrice"></span></p>
+      <p id="modalDescription"></p>
+      <button class="close-btn" onclick="closeModal()">Sluiten</button>
+    </div>
+  </div>
 
   <script src="bots.js"></script>
+  <script>
+    const container = document.getElementById("botContainer");
+    const modal = document.getElementById("botModal");
+    const modalName = document.getElementById("modalName");
+    const modalPrice = document.getElementById("modalPrice");
+    const modalDescription = document.getElementById("modalDescription");
+
+    bots.forEach(bot => {
+      const card = document.createElement("div");
+      card.className = "bot-card";
+      card.innerHTML = `<h3>${bot.name}</h3><p>${bot.price}</p>`;
+      card.onclick = () => showBotDetails(bot);
+      container.appendChild(card);
+    });
+
+    function showBotDetails(bot) {
+      modalName.textContent = bot.name;
+      modalPrice.textContent = bot.price;
+      modalDescription.textContent = bot.fullDescription || bot.description;
+      modal.style.display = "flex";
+    }
+
+    function closeModal() {
+      modal.style.display = "none";
+    }
+  </script>
 </body>
 </html>
