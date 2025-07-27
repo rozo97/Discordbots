@@ -3,68 +3,186 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Welkom bij Discord Bots</title>
+  <title>Discord Bot Winkel</title>
   <style>
     body {
+      font-family: 'Segoe UI', sans-serif;
       background-color: #071725;
       color: white;
-      font-family: 'Segoe UI', sans-serif;
       text-align: center;
-      padding: 40px 20px;
+      padding: 20px;
+    }
+
+    a {
+      text-decoration: none;
     }
 
     .logo {
-      width: 140px;
-      margin-bottom: 20px;
+      width: 120px;
+      margin-bottom: 10px;
+      cursor: pointer;
     }
 
     h1 {
-      font-size: 2em;
-      margin-bottom: 10px;
+      margin-bottom: 30px;
       color: #ffc107;
     }
 
-    p {
-      font-size: 1.1em;
-      color: #cfd8dc;
-      max-width: 600px;
-      margin: 0 auto 30px;
+    .bot-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
     }
 
-    .shop-button {
+    .bot-card {
+      background: #0d2538;
+      padding: 20px;
+      border-radius: 12px;
+      margin: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      transition: transform 0.2s ease;
+    }
+
+    .bot-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .bot-card h3 {
+      margin-top: 0;
+    }
+
+    .info-btn {
       background-color: #5865f2;
       color: white;
+      padding: 10px 16px;
       border: none;
-      padding: 14px 24px;
-      border-radius: 10px;
-      font-size: 1.1em;
+      border-radius: 8px;
+      margin-top: 10px;
       cursor: pointer;
-      text-decoration: none;
       font-weight: bold;
-      transition: background-color 0.2s ease;
     }
 
-    .shop-button:hover {
+    .info-btn:hover {
       background-color: #4752c4;
     }
 
-    footer {
-      margin-top: 50px;
-      color: #78909c;
-      font-size: 0.9em;
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: #0d2538;
+      padding: 20px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.4);
+    }
+
+    .close-btn {
+      background: #ff4444;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      margin-top: 10px;
+      cursor: pointer;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <img src="discordbot_logo.png" alt="Logo" class="logo" />
+  <!-- Klikbaar logo naar index.html -->
+  <a href="index.html">
+    <img src="discordbot_logo.png" alt="Logo" class="logo" />
+  </a>
 
-  <h1>Welkom bij mijn Discord Bot Shop 👋</h1>
-  <p>Hier verkoop ik gebruiksklare én op maat gemaakte Discord bots. Klik hieronder om de bots te bekijken of toe te voegen aan je server.</p>
+  <h1>🛍️ Shop onze Discord Bots</h1>
 
-  <a href="shop.html" class="shop-button">🛍️ Ga naar de Shop</a>
+  <div class="bot-container" id="bot-container"></div>
 
-  <footer>
-    <p>📩 Contact via Discord: <a href="https://discord.gg/XjZhuZNEHS" style="color:#58a6ff;">discord.gg/XjZhuZNEHS</a></p>
-  </footer>
+  <!-- Modal -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <h2 id="modal-title"></h2>
+      <p id="modal-description"></p>
+      <button class="close-btn" onclick="closeModal()">Sluiten</button>
+    </div>
+  </div>
+
+  <!-- Bots Script -->
+  <script>
+    const bots = [
+      {
+        name: "Ticket Bot",
+        emoji: "🎫",
+        price: "Gratis",
+        description: "Simpel ticket systeem",
+        fullDescription: "🎫 Deze bot biedt een volledig ticket systeem met knopreacties, logs en automatische sluiting van tickets. Ideaal voor support servers."
+      },
+      {
+        name: "Giveaway Bot",
+        emoji: "🎉",
+        price: "Gratis",
+        description: "Start en beheer giveaways",
+        fullDescription: "🎉 Start giveaways via slash commands, met automatische eindtijd, herrolling en logs. Makkelijk te gebruiken en veilig tegen spam."
+      },
+      {
+        name: "Level Bot",
+        emoji: "📈",
+        price: "€5",
+        description: "Level systeem op berichten",
+        fullDescription: "📈 Gebruikers verdienen XP op basis van activiteit. Je kunt rollen koppelen aan levels, en de bot bevat een leaderboard en XP-configuratie."
+      },
+      {
+        name: "Custom Bot",
+        emoji: "⚙️",
+        price: "€10–€200",
+        description: "Op maat gemaakte bots",
+        fullDescription: "⚙️ Een volledig op maat gemaakte bot met 1 tot 20 commando’s of functies. Jij kiest wat hij doet, ik bouw het. Prijs op basis van complexiteit."
+      }
+    ];
+
+    const container = document.getElementById("bot-container");
+    const modal = document.getElementById("modal");
+    const modalTitle = document.getElementById("modal-title");
+    const modalDescription = document.getElementById("modal-description");
+
+    bots.forEach(bot => {
+      const card = document.createElement("div");
+      card.className = "bot-card";
+      card.innerHTML = `
+        <h3>${bot.emoji} ${bot.name}</h3>
+        <p>${bot.description}</p>
+        <strong>💰 ${bot.price}</strong><br>
+        <button class="info-btn" onclick='openModal(${JSON.stringify(bot)})'>ℹ️ Meer info</button>
+      `;
+      container.appendChild(card);
+    });
+
+    function openModal(bot) {
+      modalTitle.innerText = `${bot.emoji} ${bot.name}`;
+      modalDescription.innerText = bot.fullDescription;
+      modal.style.display = "flex";
+    }
+
+    function closeModal() {
+      modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target === modal) {
+        closeModal();
+      }
+    };
+  </script>
 </body>
 </html>
