@@ -10,20 +10,48 @@
       background-color: #071725;
       color: white;
       text-align: center;
-      padding: 20px;
-      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Loader */
+    #loader {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: #071725;
       display: flex;
-      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .spinner {
+      border: 6px solid #ffffff33;
+      border-top: 6px solid #ffc107;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .hidden {
+      display: none;
     }
 
     .logo {
       width: 120px;
-      margin-bottom: 10px;
+      margin-top: 20px;
       cursor: pointer;
     }
 
     h1 {
-      margin-bottom: 30px;
+      margin: 20px 0;
       color: #ffc107;
     }
 
@@ -31,13 +59,13 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
+      padding: 20px;
     }
 
     .bot-card {
-      background: #2d2d44;
+      background: #0e2a40;
       padding: 20px;
       border-radius: 12px;
-      margin: 10px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.3);
       transition: transform 0.2s ease;
     }
@@ -46,25 +74,22 @@
       transform: translateY(-5px);
     }
 
-    .bot-card h3 {
-      margin-top: 0;
-    }
-
-    .info-btn {
+    .info-btn, .cart-btn {
       background-color: #5865f2;
       color: white;
       padding: 10px 16px;
       border: none;
       border-radius: 8px;
-      margin-top: 10px;
+      margin: 5px;
       cursor: pointer;
       font-weight: bold;
     }
 
-    .info-btn:hover {
+    .info-btn:hover, .cart-btn:hover {
       background-color: #4752c4;
     }
 
+    /* Modal styles */
     .modal {
       display: none;
       position: fixed;
@@ -74,21 +99,14 @@
       justify-content: center;
       align-items: center;
       z-index: 1000;
-      animation: fadeIn 0.3s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
     }
 
     .modal-content {
-      background: #2d2d44;
+      background: #0e2a40;
       padding: 20px;
       border-radius: 12px;
       width: 90%;
       max-width: 400px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.4);
     }
 
     .close-btn {
@@ -103,18 +121,16 @@
     }
 
     footer {
-      background-color: #0c263b;
-      color: white;
-      padding: 20px 10px;
+      margin-top: 40px;
+      padding: 20px;
+      background-color: #00000044;
+      color: #ccc;
       font-size: 14px;
-      text-align: center;
-      margin-top: auto;
     }
 
     footer a {
-      color: #66b2ff;
+      color: #4da6ff;
       text-decoration: none;
-      font-weight: bold;
     }
 
     footer a:hover {
@@ -123,55 +139,69 @@
   </style>
 </head>
 <body>
+  <!-- Loader -->
+  <div id="loader"><div class="spinner"></div></div>
+
+  <!-- Logo -->
   <a href="index.html">
     <img src="discordbot_logo.png" alt="Logo" class="logo" />
   </a>
+
   <h1>🛍️ Shop onze Discord Bots</h1>
 
   <div class="bot-container" id="botContainer"></div>
 
-  <div class="modal" id="modal">
-    <div class="modal-content">
+  <!-- Modal -->
+  <div class="modal" id="botModal">
+    <div class="modal-content" id="modalContent">
       <h3 id="modalTitle"></h3>
-      <p id="modalText"></p>
+      <p id="modalDescription"></p>
       <button class="close-btn" onclick="closeModal()">Sluiten</button>
     </div>
   </div>
 
+  <!-- Footer -->
   <footer>
-    📧 E-mail: rozo97@example.com<br>
-    📞 Telefoon: +31 6 12345678<br>
-    🔗 <a href="https://discord.gg/XjZhuZNEHS" target="_blank">Discord</a>
+    📧 E-mail: support@discordbots.nl &nbsp; | &nbsp;
+    📞 Tel: 06-12345678 &nbsp; | &nbsp;
+    💬 <a href="https://discord.gg/XjZhuZNEHS" target="_blank">Discord</a>
   </footer>
 
+  <!-- Scripts -->
   <script src="bots.js"></script>
   <script>
-    const botsContainer = document.getElementById('botContainer');
-    const modal = document.getElementById('modal');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalText = document.getElementById('modalText');
+    const container = document.getElementById("botContainer");
+    const modal = document.getElementById("botModal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalDescription = document.getElementById("modalDescription");
 
-    function openModal(bot) {
-      modalTitle.textContent = bot.emoji + ' ' + bot.name;
-      modalText.textContent = bot.fullDescription;
-      modal.style.display = 'flex';
+    bots.forEach(bot => {
+      const card = document.createElement("div");
+      card.className = "bot-card";
+      card.innerHTML = `
+        <h3>${bot.emoji} ${bot.name}</h3>
+        <p><strong>Prijs:</strong> ${bot.price}</p>
+        <p>${bot.description}</p>
+        <button class="info-btn" onclick="showModal('${bot.name}', \`${bot.fullDescription}\`)">ℹ️ Info</button>
+        <button class="cart-btn">🛒 Voeg toe</button>
+      `;
+      container.appendChild(card);
+    });
+
+    function showModal(title, desc) {
+      modalTitle.textContent = title;
+      modalDescription.textContent = desc;
+      modal.style.display = "flex";
     }
 
     function closeModal() {
-      modal.style.display = 'none';
+      modal.style.display = "none";
     }
 
-    bots.forEach(bot => {
-      const card = document.createElement('div');
-      card.className = 'bot-card';
-      card.innerHTML = `
-        <h3>${bot.emoji} ${bot.name}</h3>
-        <p>${bot.description}</p>
-        <strong>💶 ${bot.price}</strong><br>
-        <button class="info-btn" onclick='openModal(${JSON.stringify(bot)})'>ℹ️ Meer info</button>
-      `;
-      botsContainer.appendChild(card);
+    // Loader verwijderen na laden
+    window.addEventListener("load", () => {
+      document.getElementById("loader").classList.add("hidden");
     });
   </script>
 </body>
-  </html>
+</html>
