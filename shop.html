@@ -9,26 +9,54 @@
       font-family: 'Segoe UI', sans-serif;
       background-color: #071725;
       color: white;
-      text-align: center;
-      padding: 20px;
       margin: 0;
+      padding: 0;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
     }
 
     .logo {
-      width: 120px;
-      margin-bottom: 10px;
+      width: 100px;
       cursor: pointer;
     }
 
+    .cart-icon {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .cart-icon img {
+      width: 40px;
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background-color: red;
+      color: white;
+      border-radius: 50%;
+      padding: 3px 8px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
     h1 {
-      margin-bottom: 30px;
+      text-align: center;
       color: #ffc107;
+      margin-top: 0;
     }
 
     .bot-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
+      padding: 20px;
     }
 
     .bot-card {
@@ -38,6 +66,7 @@
       margin: 10px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.3);
       transition: transform 0.2s ease;
+      text-align: center;
     }
 
     .bot-card:hover {
@@ -50,7 +79,7 @@
       padding: 10px 16px;
       border: none;
       border-radius: 8px;
-      margin-top: 10px;
+      margin: 5px;
       cursor: pointer;
       font-weight: bold;
     }
@@ -59,7 +88,7 @@
       background-color: #4752c4;
     }
 
-    /* Modal */
+    /* Modal (info en winkelwagen) */
     .modal {
       display: none;
       position: fixed;
@@ -77,6 +106,9 @@
       border-radius: 12px;
       width: 90%;
       max-width: 400px;
+      max-height: 80vh;
+      overflow-y: auto;
+      text-align: left;
     }
 
     .close-btn {
@@ -90,35 +122,24 @@
       font-weight: bold;
     }
 
-    /* Loader */
-    #loader {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      background: #071725;
-      top: 0;
-      left: 0;
-      z-index: 9999;
+    .cart-item {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
+      margin: 10px 0;
+      padding: 8px;
+      border-bottom: 1px solid #ccc;
     }
 
-    .hidden {
-      display: none !important;
+    .cart-item span {
+      flex-grow: 1;
     }
 
-    .spinner {
-      border: 6px solid #ccc;
-      border-top: 6px solid #ffc107;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    .trash {
+      cursor: pointer;
+      color: #ff4444;
+      font-weight: bold;
+      margin-left: 10px;
     }
 
     footer {
@@ -126,6 +147,8 @@
       padding: 20px;
       background: #06121e;
       font-size: 14px;
+      color: white;
+      text-align: center;
     }
 
     footer a {
@@ -139,20 +162,33 @@
   </style>
 </head>
 <body>
-  <div id="loader">
-    <div class="spinner"></div>
-  </div>
 
-  <img src="discordbot_logo.png" alt="Logo" class="logo" onclick="location.href='index.html'" />
+  <!-- Header -->
+  <header>
+    <img src="discordbot_logo.png" alt="Logo" class="logo" onclick="location.href='index.html'" />
+    <div class="cart-icon" onclick="openCart()">
+      <img src="https://cdn-icons-png.flaticon.com/512/263/263142.png" alt="Winkelwagen">
+      <div class="cart-badge" id="cartCount">0</div>
+    </div>
+  </header>
+
   <h1>🛍️ Shop onze Discord Bots</h1>
-
   <div class="bot-container" id="botContainer"></div>
 
-  <!-- Modal -->
-  <div class="modal" id="modal">
-    <div class="modal-content" id="modalContent">
+  <!-- Info Modal -->
+  <div class="modal" id="infoModal">
+    <div class="modal-content">
       <p id="modalText"></p>
       <button class="close-btn" onclick="closeModal()">Sluiten</button>
+    </div>
+  </div>
+
+  <!-- Cart Modal -->
+  <div class="modal" id="cartModal">
+    <div class="modal-content">
+      <h3>🛒 Jouw winkelwagen</h3>
+      <div id="cartItems"></div>
+      <button class="close-btn" onclick="closeCart()">Sluiten</button>
     </div>
   </div>
 
@@ -161,7 +197,6 @@
   </footer>
 
   <script>
-    // Bots
     const bots = [
       {
         name: "Ticket Bot",
@@ -193,40 +228,72 @@
       }
     ];
 
-    // Laad bots in container
-    const botContainer = document.getElementById("botContainer");
-    const modal = document.getElementById("modal");
-    const modalText = document.getElementById("modalText");
+    let cart = [];
 
-    function openModal(content) {
-      modalText.textContent = content;
-      modal.style.display = "flex";
+    function renderBots() {
+      const container = document.getElementById("botContainer");
+      bots.forEach(bot => {
+        const div = document.createElement("div");
+        div.className = "bot-card";
+        div.innerHTML = `
+          <h3>${bot.emoji} ${bot.name}</h3>
+          <p><strong>Prijs:</strong> ${bot.price}</p>
+          <p>${bot.description}</p>
+          <button class="info-btn" onclick="openModal('${bot.fullDescription.replace(/'/g, "\\'")}')">ℹ️ Info</button>
+          <button class="cart-btn" onclick="addToCart('${bot.name}')">🛒 Toevoegen</button>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function openModal(text) {
+      document.getElementById("modalText").textContent = text;
+      document.getElementById("infoModal").style.display = "flex";
     }
 
     function closeModal() {
-      modal.style.display = "none";
+      document.getElementById("infoModal").style.display = "none";
     }
 
-    bots.forEach(bot => {
-      const div = document.createElement("div");
-      div.className = "bot-card";
-      div.innerHTML = `
-        <h3>${bot.emoji} ${bot.name}</h3>
-        <p><strong>Prijs:</strong> ${bot.price}</p>
-        <p>${bot.description}</p>
-        <button class="info-btn" onclick="openModal('${bot.fullDescription.replace(/'/g, "\\'")}')">ℹ️ Info</button>
-        <button class="cart-btn">🛒 Toevoegen aan winkelwagen</button>
-      `;
-      botContainer.appendChild(div);
-    });
-
-    // Loader verbergen na load of fallback
-    function hideLoader() {
-      document.getElementById("loader").classList.add("hidden");
+    function openCart() {
+      const cartItems = document.getElementById("cartItems");
+      cartItems.innerHTML = "";
+      if (cart.length === 0) {
+        cartItems.innerHTML = "<p>🛒 Je winkelwagen is leeg.</p>";
+      } else {
+        cart.forEach((item, index) => {
+          const div = document.createElement("div");
+          div.className = "cart-item";
+          div.innerHTML = `
+            <span>${item}</span>
+            <span class="trash" onclick="removeFromCart(${index})">🗑️</span>
+          `;
+          cartItems.appendChild(div);
+        });
+      }
+      document.getElementById("cartModal").style.display = "flex";
     }
 
-    window.addEventListener("load", hideLoader);
-    setTimeout(hideLoader, 3000); // Fallback na 3 seconden
+    function closeCart() {
+      document.getElementById("cartModal").style.display = "none";
+    }
+
+    function addToCart(botName) {
+      cart.push(botName);
+      updateCartCount();
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCartCount();
+      openCart();
+    }
+
+    function updateCartCount() {
+      document.getElementById("cartCount").textContent = cart.length;
+    }
+
+    renderBots();
   </script>
 </body>
-</html>
+  </html>
