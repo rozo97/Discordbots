@@ -161,6 +161,7 @@
   </footer>
 
   <script>
+    // Bots
     const bots = [
       {
         name: "Ticket Bot",
@@ -192,6 +193,7 @@
       }
     ];
 
+    // Laad bots in container
     const botContainer = document.getElementById("botContainer");
     const modal = document.getElementById("modal");
     const modalText = document.getElementById("modalText");
@@ -218,15 +220,13 @@
       botContainer.appendChild(div);
     });
 
-    // Loader verbergen na laden
-    window.addEventListener("load", () => {
+    // Loader verbergen na load of fallback
+    function hideLoader() {
       document.getElementById("loader").classList.add("hidden");
-    });
+    }
 
-    // Fallback na 4 sec
-    setTimeout(() => {
-      document.getElementById("loader").classList.add("hidden");
-    }, 4000);
+    window.addEventListener("load", hideLoader);
+    setTimeout(hideLoader, 3000); // Fallback na 3 seconden
   </script>
 </body>
 </html>
