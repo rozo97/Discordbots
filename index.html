@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Welkom bij Discord Bots</title>
   <style>
     body {
@@ -12,6 +12,9 @@
       font-family: 'Segoe UI', sans-serif;
       color: white;
       text-align: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     .logo {
@@ -45,10 +48,27 @@
       margin-top: 40px;
       padding: 20px;
     }
+
+    footer {
+      background-color: #0c263b;
+      color: white;
+      padding: 20px 10px;
+      font-size: 14px;
+      margin-top: auto;
+    }
+
+    footer a {
+      color: #66b2ff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
-  <!-- Logo -->
   <a href="index.html">
     <img src="discordbot_logo.png" alt="Logo" class="logo">
   </a>
@@ -61,5 +81,11 @@
       <button class="btn">🛍️ Ga naar de Shop</button>
     </a>
   </div>
+
+  <footer>
+    📧 E-mail: rozo97@example.com<br>
+    📞 Telefoon: +31 6 12345678<br>
+    🔗 <a href="https://discord.gg/XjZhuZNEHS" target="_blank">Discord</a>
+  </footer>
 </body>
 </html>
