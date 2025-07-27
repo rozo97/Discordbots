@@ -10,48 +10,18 @@
       background-color: #071725;
       color: white;
       text-align: center;
+      padding: 20px;
       margin: 0;
-      padding: 0;
-    }
-
-    /* Loader */
-    #loader {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-color: #071725;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-    }
-
-    .spinner {
-      border: 6px solid #ffffff33;
-      border-top: 6px solid #ffc107;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .hidden {
-      display: none;
     }
 
     .logo {
       width: 120px;
-      margin-top: 20px;
+      margin-bottom: 10px;
       cursor: pointer;
     }
 
     h1 {
-      margin: 20px 0;
+      margin-bottom: 30px;
       color: #ffc107;
     }
 
@@ -59,13 +29,13 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
-      padding: 20px;
     }
 
     .bot-card {
-      background: #0e2a40;
+      background: #0d243b;
       padding: 20px;
       border-radius: 12px;
+      margin: 10px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.3);
       transition: transform 0.2s ease;
     }
@@ -80,7 +50,7 @@
       padding: 10px 16px;
       border: none;
       border-radius: 8px;
-      margin: 5px;
+      margin-top: 10px;
       cursor: pointer;
       font-weight: bold;
     }
@@ -89,7 +59,7 @@
       background-color: #4752c4;
     }
 
-    /* Modal styles */
+    /* Modal */
     .modal {
       display: none;
       position: fixed;
@@ -102,7 +72,7 @@
     }
 
     .modal-content {
-      background: #0e2a40;
+      background: #0d243b;
       padding: 20px;
       border-radius: 12px;
       width: 90%;
@@ -120,16 +90,46 @@
       font-weight: bold;
     }
 
+    /* Loader */
+    #loader {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: #071725;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .spinner {
+      border: 6px solid #ccc;
+      border-top: 6px solid #ffc107;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
     footer {
       margin-top: 40px;
       padding: 20px;
-      background-color: #00000044;
-      color: #ccc;
+      background: #06121e;
       font-size: 14px;
     }
 
     footer a {
-      color: #4da6ff;
+      color: #ffc107;
       text-decoration: none;
     }
 
@@ -139,58 +139,65 @@
   </style>
 </head>
 <body>
-  <!-- Loader -->
-  <div id="loader"><div class="spinner"></div></div>
+  <div id="loader">
+    <div class="spinner"></div>
+  </div>
 
-  <!-- Logo -->
-  <a href="index.html">
-    <img src="discordbot_logo.png" alt="Logo" class="logo" />
-  </a>
-
+  <img src="discordbot_logo.png" alt="Logo" class="logo" onclick="location.href='index.html'" />
   <h1>🛍️ Shop onze Discord Bots</h1>
 
   <div class="bot-container" id="botContainer"></div>
 
   <!-- Modal -->
-  <div class="modal" id="botModal">
+  <div class="modal" id="modal">
     <div class="modal-content" id="modalContent">
-      <h3 id="modalTitle"></h3>
-      <p id="modalDescription"></p>
+      <p id="modalText"></p>
       <button class="close-btn" onclick="closeModal()">Sluiten</button>
     </div>
   </div>
 
-  <!-- Footer -->
   <footer>
-    📧 E-mail: support@discordbots.nl &nbsp; | &nbsp;
-    📞 Tel: 06-12345678 &nbsp; | &nbsp;
-    💬 <a href="https://discord.gg/XjZhuZNEHS" target="_blank">Discord</a>
+    📧 Email: info@jouwsite.nl | 📞 Tel: 0612345678 | 💬 <a href="https://discord.gg/XjZhuZNEHS" target="_blank">Discord</a>
   </footer>
 
-  <!-- Scripts -->
-  <script src="bots.js"></script>
   <script>
-    const container = document.getElementById("botContainer");
-    const modal = document.getElementById("botModal");
-    const modalTitle = document.getElementById("modalTitle");
-    const modalDescription = document.getElementById("modalDescription");
+    const bots = [
+      {
+        name: "Ticket Bot",
+        emoji: "🎫",
+        price: "Gratis",
+        description: "Simpel ticket systeem",
+        fullDescription: "🎫 Deze bot biedt een volledig ticket systeem met knopreacties, logs en automatische sluiting van tickets. Ideaal voor support servers."
+      },
+      {
+        name: "Giveaway Bot",
+        emoji: "🎉",
+        price: "Gratis",
+        description: "Start en beheer giveaways",
+        fullDescription: "🎉 Start giveaways via slash commands, met automatische eindtijd, herrolling en logs. Makkelijk te gebruiken en veilig tegen spam."
+      },
+      {
+        name: "Level Bot",
+        emoji: "📈",
+        price: "€5",
+        description: "Level systeem op berichten",
+        fullDescription: "📈 Gebruikers verdienen XP op basis van activiteit. Je kunt rollen koppelen aan levels, en de bot bevat een leaderboard en XP-configuratie."
+      },
+      {
+        name: "Custom Bot",
+        emoji: "⚙️",
+        price: "€10–€200",
+        description: "Op maat gemaakte bots",
+        fullDescription: "⚙️ Een volledig op maat gemaakte bot met 1 tot 20 commando’s of functies. Jij kiest wat hij doet, ik bouw het. Prijs op basis van complexiteit."
+      }
+    ];
 
-    bots.forEach(bot => {
-      const card = document.createElement("div");
-      card.className = "bot-card";
-      card.innerHTML = `
-        <h3>${bot.emoji} ${bot.name}</h3>
-        <p><strong>Prijs:</strong> ${bot.price}</p>
-        <p>${bot.description}</p>
-        <button class="info-btn" onclick="showModal('${bot.name}', \`${bot.fullDescription}\`)">ℹ️ Info</button>
-        <button class="cart-btn">🛒 Voeg toe</button>
-      `;
-      container.appendChild(card);
-    });
+    const botContainer = document.getElementById("botContainer");
+    const modal = document.getElementById("modal");
+    const modalText = document.getElementById("modalText");
 
-    function showModal(title, desc) {
-      modalTitle.textContent = title;
-      modalDescription.textContent = desc;
+    function openModal(content) {
+      modalText.textContent = content;
       modal.style.display = "flex";
     }
 
@@ -198,10 +205,28 @@
       modal.style.display = "none";
     }
 
-    // Loader verwijderen na laden
+    bots.forEach(bot => {
+      const div = document.createElement("div");
+      div.className = "bot-card";
+      div.innerHTML = `
+        <h3>${bot.emoji} ${bot.name}</h3>
+        <p><strong>Prijs:</strong> ${bot.price}</p>
+        <p>${bot.description}</p>
+        <button class="info-btn" onclick="openModal('${bot.fullDescription.replace(/'/g, "\\'")}')">ℹ️ Info</button>
+        <button class="cart-btn">🛒 Toevoegen aan winkelwagen</button>
+      `;
+      botContainer.appendChild(div);
+    });
+
+    // Loader verbergen na laden
     window.addEventListener("load", () => {
       document.getElementById("loader").classList.add("hidden");
     });
+
+    // Fallback na 4 sec
+    setTimeout(() => {
+      document.getElementById("loader").classList.add("hidden");
+    }, 4000);
   </script>
 </body>
 </html>
