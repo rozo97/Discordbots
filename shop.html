@@ -11,10 +11,9 @@
       color: white;
       text-align: center;
       padding: 20px;
-    }
-
-    a {
-      text-decoration: none;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     .logo {
@@ -35,7 +34,7 @@
     }
 
     .bot-card {
-      background: #0d2538;
+      background: #2d2d44;
       padding: 20px;
       border-radius: 12px;
       margin: 10px;
@@ -66,7 +65,6 @@
       background-color: #4752c4;
     }
 
-    /* Modal styles */
     .modal {
       display: none;
       position: fixed;
@@ -76,10 +74,16 @@
       justify-content: center;
       align-items: center;
       z-index: 1000;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     .modal-content {
-      background: #0d2538;
+      background: #2d2d44;
       padding: 20px;
       border-radius: 12px;
       width: 90%;
@@ -97,92 +101,77 @@
       cursor: pointer;
       font-weight: bold;
     }
+
+    footer {
+      background-color: #0c263b;
+      color: white;
+      padding: 20px 10px;
+      font-size: 14px;
+      text-align: center;
+      margin-top: auto;
+    }
+
+    footer a {
+      color: #66b2ff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
-  <!-- Klikbaar logo naar index.html -->
   <a href="index.html">
     <img src="discordbot_logo.png" alt="Logo" class="logo" />
   </a>
-
   <h1>🛍️ Shop onze Discord Bots</h1>
 
-  <div class="bot-container" id="bot-container"></div>
+  <div class="bot-container" id="botContainer"></div>
 
-  <!-- Modal -->
   <div class="modal" id="modal">
     <div class="modal-content">
-      <h2 id="modal-title"></h2>
-      <p id="modal-description"></p>
+      <h3 id="modalTitle"></h3>
+      <p id="modalText"></p>
       <button class="close-btn" onclick="closeModal()">Sluiten</button>
     </div>
   </div>
 
-  <!-- Bots Script -->
+  <footer>
+    📧 E-mail: rozo97@example.com<br>
+    📞 Telefoon: +31 6 12345678<br>
+    🔗 <a href="https://discord.gg/XjZhuZNEHS" target="_blank">Discord</a>
+  </footer>
+
+  <script src="bots.js"></script>
   <script>
-    const bots = [
-      {
-        name: "Ticket Bot",
-        emoji: "🎫",
-        price: "Gratis",
-        description: "Simpel ticket systeem",
-        fullDescription: "🎫 Deze bot biedt een volledig ticket systeem met knopreacties, logs en automatische sluiting van tickets. Ideaal voor support servers."
-      },
-      {
-        name: "Giveaway Bot",
-        emoji: "🎉",
-        price: "Gratis",
-        description: "Start en beheer giveaways",
-        fullDescription: "🎉 Start giveaways via slash commands, met automatische eindtijd, herrolling en logs. Makkelijk te gebruiken en veilig tegen spam."
-      },
-      {
-        name: "Level Bot",
-        emoji: "📈",
-        price: "€5",
-        description: "Level systeem op berichten",
-        fullDescription: "📈 Gebruikers verdienen XP op basis van activiteit. Je kunt rollen koppelen aan levels, en de bot bevat een leaderboard en XP-configuratie."
-      },
-      {
-        name: "Custom Bot",
-        emoji: "⚙️",
-        price: "€10–€200",
-        description: "Op maat gemaakte bots",
-        fullDescription: "⚙️ Een volledig op maat gemaakte bot met 1 tot 20 commando’s of functies. Jij kiest wat hij doet, ik bouw het. Prijs op basis van complexiteit."
-      }
-    ];
-
-    const container = document.getElementById("bot-container");
-    const modal = document.getElementById("modal");
-    const modalTitle = document.getElementById("modal-title");
-    const modalDescription = document.getElementById("modal-description");
-
-    bots.forEach(bot => {
-      const card = document.createElement("div");
-      card.className = "bot-card";
-      card.innerHTML = `
-        <h3>${bot.emoji} ${bot.name}</h3>
-        <p>${bot.description}</p>
-        <strong>💰 ${bot.price}</strong><br>
-        <button class="info-btn" onclick='openModal(${JSON.stringify(bot)})'>ℹ️ Meer info</button>
-      `;
-      container.appendChild(card);
-    });
+    const botsContainer = document.getElementById('botContainer');
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalText = document.getElementById('modalText');
 
     function openModal(bot) {
-      modalTitle.innerText = `${bot.emoji} ${bot.name}`;
-      modalDescription.innerText = bot.fullDescription;
-      modal.style.display = "flex";
+      modalTitle.textContent = bot.emoji + ' ' + bot.name;
+      modalText.textContent = bot.fullDescription;
+      modal.style.display = 'flex';
     }
 
     function closeModal() {
-      modal.style.display = "none";
+      modal.style.display = 'none';
     }
 
-    window.onclick = function(event) {
-      if (event.target === modal) {
-        closeModal();
-      }
-    };
+    bots.forEach(bot => {
+      const card = document.createElement('div');
+      card.className = 'bot-card';
+      card.innerHTML = `
+        <h3>${bot.emoji} ${bot.name}</h3>
+        <p>${bot.description}</p>
+        <strong>💶 ${bot.price}</strong><br>
+        <button class="info-btn" onclick='openModal(${JSON.stringify(bot)})'>ℹ️ Meer info</button>
+      `;
+      botsContainer.appendChild(card);
+    });
   </script>
 </body>
-</html>
+  </html>
