@@ -9,97 +9,73 @@
       font-family: 'Segoe UI', sans-serif;
       background-color: #071725;
       color: white;
-      margin: 0;
-      padding: 0;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      text-align: center;
       padding: 20px;
     }
 
     .logo {
-      width: 100px;
+      width: 120px;
+      margin-bottom: 10px;
       cursor: pointer;
-    }
-
-    .cart-icon {
-      position: relative;
-      cursor: pointer;
-    }
-
-    .cart-icon img {
-      width: 40px;
-    }
-
-    .cart-badge {
-      position: absolute;
-      top: -8px;
-      right: -8px;
-      background-color: red;
-      color: white;
-      border-radius: 50%;
-      padding: 3px 8px;
-      font-size: 12px;
-      font-weight: bold;
     }
 
     h1 {
-      text-align: center;
+      margin-bottom: 30px;
       color: #ffc107;
-      margin-top: 0;
-    }
-
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 20px;
-    }
-
-    select {
-      background-color: #0d243b;
-      color: white;
-      border: 1px solid white;
-      padding: 5px;
-      border-radius: 5px;
     }
 
     .bot-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
-      padding: 20px;
     }
 
     .bot-card {
-      background: #0d243b;
+      background: #0e253b;
       padding: 20px;
       border-radius: 12px;
-      margin: 10px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-      transition: transform 0.2s ease;
-      text-align: center;
     }
 
-    .bot-card:hover {
-      transform: translateY(-5px);
-    }
-
-    .info-btn, .cart-btn {
+    .info-btn {
       background-color: #5865f2;
       color: white;
       padding: 10px 16px;
       border: none;
       border-radius: 8px;
-      margin: 5px;
+      margin-top: 10px;
       cursor: pointer;
       font-weight: bold;
     }
 
-    .modal {
+    .info-btn:hover {
+      background-color: #4752c4;
+    }
+
+    .cart-icon {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      font-size: 26px;
+      background: #ffc107;
+      color: #071725;
+      border-radius: 50%;
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: red;
+      color: white;
+      font-size: 12px;
+      border-radius: 50%;
+      padding: 2px 6px;
+    }
+
+    .modal, .cart-modal {
       display: none;
       position: fixed;
       top: 0; left: 0;
@@ -110,15 +86,13 @@
       z-index: 1000;
     }
 
-    .modal-content {
-      background: #0d243b;
+    .modal-content, .cart-modal-content {
+      background: #0e253b;
       padding: 20px;
       border-radius: 12px;
       width: 90%;
       max-width: 400px;
-      max-height: 80vh;
-      overflow-y: auto;
-      text-align: left;
+      box-shadow: 0 0 15px rgba(0,0,0,0.4);
     }
 
     .close-btn {
@@ -132,201 +106,151 @@
       font-weight: bold;
     }
 
-    .cart-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 10px 0;
-      padding: 8px;
-      border-bottom: 1px solid #ccc;
-    }
-
-    .trash {
-      cursor: pointer;
-      color: #ff4444;
-      font-weight: bold;
-      margin-left: 10px;
-    }
-
-    footer {
+    .footer {
       margin-top: 40px;
       padding: 20px;
-      background: #06121e;
+      background-color: #04101c;
       font-size: 14px;
-      color: white;
-      text-align: center;
     }
 
-    footer a {
+    .footer a {
       color: #ffc107;
       text-decoration: none;
     }
 
-    footer a:hover {
-      text-decoration: underline;
+    .trash {
+      cursor: pointer;
+      color: red;
+      font-size: 18px;
+      margin-left: 10px;
     }
   </style>
 </head>
 <body>
+  <img src="discordbot_logo.png" alt="Logo" class="logo" onclick="window.location.href='index.html'" />
+  <h1>🛍️ Shop onze Discord Bots</h1>
 
-  <!-- Header + Language -->
-  <header>
-    <img src="discordbot_logo.png" alt="Logo" class="logo" onclick="location.href='index.html'" />
-    <div class="top-bar">
-      <select id="languageSelect" onchange="changeLanguage()">
-        <option value="nl">🇳🇱 Nederlands</option>
-        <option value="en">🇬🇧 English</option>
-      </select>
-    </div>
-    <div class="cart-icon" onclick="openCart()">
-      <img src="https://cdn-icons-png.flaticon.com/512/263/263142.png" alt="Winkelwagen">
-      <div class="cart-badge" id="cartCount">0</div>
-    </div>
-  </header>
+  <div class="cart-icon" onclick="toggleCart()">
+    🛒<span class="cart-count" id="cart-count">0</span>
+  </div>
 
-  <h1 id="title">🛍️ Shop onze Discord Bots</h1>
-  <div class="bot-container" id="botContainer"></div>
+  <div class="bot-container" id="bot-container"></div>
 
-  <!-- Info Modal -->
-  <div class="modal" id="infoModal">
+  <!-- Product Info Modal -->
+  <div class="modal" id="info-modal">
     <div class="modal-content">
-      <p id="modalText"></p>
+      <h3 id="modal-title"></h3>
+      <p id="modal-description"></p>
       <button class="close-btn" onclick="closeModal()">Sluiten</button>
     </div>
   </div>
 
   <!-- Cart Modal -->
-  <div class="modal" id="cartModal">
-    <div class="modal-content">
-      <h3 id="cartTitle">🛒 Jouw winkelwagen</h3>
-      <div id="cartItems"></div>
-      <button class="close-btn" onclick="closeCart()">Sluiten</button>
+  <div class="cart-modal" id="cart-modal">
+    <div class="cart-modal-content">
+      <h3>🛒 Jouw winkelwagen</h3>
+      <ul id="cart-items" style="text-align:left;"></ul>
+      <button class="close-btn" onclick="toggleCart()">Sluiten</button>
     </div>
   </div>
 
-  <footer>
-    📧 Email: info@jouwsite.nl | 📞 Tel: 0612345678 | 💬 <a href="https://discord.gg/XjZhuZNEHS" target="_blank">Discord</a>
-  </footer>
+  <div class="footer">
+    📧 Email: info@example.com |
+    ☎️ Tel: 06-12345678 |
+    🔗 <a href="https://discord.gg/XjZhuZNEHS" target="_blank">Discord</a>
+  </div>
 
   <script>
     const bots = [
       {
-        key: "ticket",
+        name: "Ticket Bot",
         emoji: "🎫",
         price: "Gratis",
-        priceEN: "Free",
-        shortNL: "Simpel ticket systeem",
-        shortEN: "Simple ticket system",
-        fullNL: "🎫 Deze bot biedt een volledig ticket systeem met knopreacties, logs en automatische sluiting van tickets.",
-        fullEN: "🎫 This bot provides a complete ticket system with buttons, logs, and auto-closing features."
+        description: "Simpel ticket systeem",
+        fullDescription: "🎫 Deze bot biedt een volledig ticket systeem met knopreacties, logs en automatische sluiting van tickets. Ideaal voor support servers."
       },
       {
-        key: "giveaway",
+        name: "Giveaway Bot",
         emoji: "🎉",
         price: "Gratis",
-        priceEN: "Free",
-        shortNL: "Start en beheer giveaways",
-        shortEN: "Start and manage giveaways",
-        fullNL: "🎉 Start giveaways via slash commands met automatische eindtijd en herroll opties.",
-        fullEN: "🎉 Start giveaways via slash commands with end time and reroll support."
+        description: "Start en beheer giveaways",
+        fullDescription: "🎉 Start giveaways via slash commands, met automatische eindtijd, herrolling en logs. Makkelijk te gebruiken en veilig tegen spam."
       },
       {
-        key: "level",
+        name: "Level Bot",
         emoji: "📈",
         price: "€5",
-        priceEN: "€5",
-        shortNL: "Level systeem op berichten",
-        shortEN: "Leveling based on messages",
-        fullNL: "📈 Gebruikers verdienen XP op basis van berichten en ontvangen rollen.",
-        fullEN: "📈 Users earn XP based on activity and unlock level roles."
+        description: "Level systeem op berichten",
+        fullDescription: "📈 Gebruikers verdienen XP op basis van activiteit. Je kunt rollen koppelen aan levels, en de bot bevat een leaderboard en XP-configuratie."
       },
       {
-        key: "custom",
+        name: "Custom Bot",
         emoji: "⚙️",
         price: "€10–€200",
-        priceEN: "€10–€200",
-        shortNL: "Op maat gemaakte bots",
-        shortEN: "Custom made bots",
-        fullNL: "⚙️ Een volledig op maat gemaakte bot. Jij kiest wat hij doet.",
-        fullEN: "⚙️ A custom built bot. You decide what it does."
+        description: "Op maat gemaakte bots",
+        fullDescription: "⚙️ Een volledig op maat gemaakte bot met 1 tot 20 commando’s of functies. Jij kiest wat hij doet, ik bouw het. Prijs op basis van complexiteit."
       }
     ];
 
-    let cart = [];
-    let lang = "nl";
+    const cart = [];
 
-    function renderBots() {
-      const container = document.getElementById("botContainer");
-      container.innerHTML = "";
-      bots.forEach(bot => {
-        const div = document.createElement("div");
-        div.className = "bot-card";
-        div.innerHTML = `
-          <h3>${bot.emoji} ${bot.key.charAt(0).toUpperCase() + bot.key.slice(1)} Bot</h3>
-          <p><strong>${lang === "nl" ? "Prijs" : "Price"}:</strong> ${lang === "nl" ? bot.price : bot.priceEN}</p>
-          <p>${lang === "nl" ? bot.shortNL : bot.shortEN}</p>
-          <button class="info-btn" onclick="openModal('${lang === "nl" ? bot.fullNL.replace(/'/g, "\\'") : bot.fullEN.replace(/'/g, "\\'")}')">ℹ️ Info</button>
-          <button class="cart-btn" onclick="addToCart('${bot.emoji} ${bot.key.charAt(0).toUpperCase() + bot.key.slice(1)} Bot')">🛒 ${lang === "nl" ? "Toevoegen" : "Add to cart"}</button>
-        `;
-        container.appendChild(div);
-      });
-    }
+    const container = document.getElementById("bot-container");
+    const modal = document.getElementById("info-modal");
+    const modalTitle = document.getElementById("modal-title");
+    const modalDescription = document.getElementById("modal-description");
+    const cartModal = document.getElementById("cart-modal");
+    const cartCount = document.getElementById("cart-count");
+    const cartItems = document.getElementById("cart-items");
 
-    function openModal(text) {
-      document.getElementById("modalText").textContent = text;
-      document.getElementById("infoModal").style.display = "flex";
+    bots.forEach((bot, index) => {
+      const card = document.createElement("div");
+      card.className = "bot-card";
+      card.innerHTML = `
+        <h3>${bot.emoji} ${bot.name}</h3>
+        <p>${bot.description}</p>
+        <strong>${bot.price}</strong><br>
+        <button class="info-btn" onclick="showModal('${bot.name}', \`${bot.fullDescription}\`)">ℹ️ Info</button>
+        <button class="info-btn" onclick="addToCart(${index})">🛒 Voeg toe</button>
+      `;
+      container.appendChild(card);
+    });
+
+    function showModal(title, description) {
+      modalTitle.textContent = title;
+      modalDescription.textContent = description;
+      modal.style.display = "flex";
     }
 
     function closeModal() {
-      document.getElementById("infoModal").style.display = "none";
+      modal.style.display = "none";
     }
 
-    function openCart() {
-      const cartItems = document.getElementById("cartItems");
+    function toggleCart() {
+      cartModal.style.display = cartModal.style.display === "flex" ? "none" : "flex";
+      updateCart();
+    }
+
+    function addToCart(index) {
+      cart.push(bots[index]);
+      updateCart();
+    }
+
+    function updateCart() {
+      cartCount.textContent = cart.length;
       cartItems.innerHTML = "";
-      if (cart.length === 0) {
-        cartItems.innerHTML = `<p>🛒 ${lang === "nl" ? "Je winkelwagen is leeg." : "Your cart is empty."}</p>`;
-      } else {
-        cart.forEach((item, index) => {
-          const div = document.createElement("div");
-          div.className = "cart-item";
-          div.innerHTML = `
-            <span>${item}</span>
-            <span class="trash" onclick="removeFromCart(${index})">🗑️</span>
-          `;
-          cartItems.appendChild(div);
-        });
-      }
-      document.getElementById("cartModal").style.display = "flex";
-    }
 
-    function closeCart() {
-      document.getElementById("cartModal").style.display = "none";
-    }
-
-    function addToCart(botName) {
-      cart.push(botName);
-      updateCartCount();
+      cart.forEach((item, i) => {
+        const li = document.createElement("li");
+        li.innerHTML = `${item.emoji} ${item.name} - ${item.price} 
+        <span class="trash" onclick="removeFromCart(${i})">🗑️</span>`;
+        cartItems.appendChild(li);
+      });
     }
 
     function removeFromCart(index) {
       cart.splice(index, 1);
-      updateCartCount();
-      openCart();
+      updateCart();
     }
-
-    function updateCartCount() {
-      document.getElementById("cartCount").textContent = cart.length;
-    }
-
-    function changeLanguage() {
-      lang = document.getElementById("languageSelect").value;
-      document.getElementById("title").textContent = lang === "nl" ? "🛍️ Shop onze Discord Bots" : "🛍️ Shop our Discord Bots";
-      document.getElementById("cartTitle").textContent = lang === "nl" ? "🛒 Jouw winkelwagen" : "🛒 Your Shopping Cart";
-      renderBots();
-    }
-
-    renderBots();
   </script>
 </body>
 </html>
