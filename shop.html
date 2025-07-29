@@ -1,40 +1,45 @@
-<!DOCTYPE html>
-<html lang="nl">
+<!DOCTYPE html><html lang="nl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Discord Bot Winkel</title>
-
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-THT0Z9KCPD"></script>
-  <script>
+  <title>Discord Bot Winkel</title>  <!-- Google Analytics -->  <script async src="https://www.googletagmanager.com/gtag/js?id=G-THT0Z9KCPD"></script>  <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-THT0Z9KCPD');
-  </script>
-
-  <style>
+  </script>  <style>
     :root {
+      --primary-color: #ffc107;
       --bg-color: #071725;
-      --accent-color: #ffc107;
       --card-bg: #102334;
       --text-color: white;
+      --accent-color: #5865f2;
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     body {
-      margin: 0;
       font-family: 'Segoe UI', sans-serif;
       background-color: var(--bg-color);
       color: var(--text-color);
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
+      margin: 0;
+      padding: 1rem;
     }
 
-    header {
-      text-align: center;
-      padding: 20px;
+    .topbar {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    @media (min-width: 600px) {
+      .topbar {
+        flex-direction: row;
+      }
     }
 
     .logo {
@@ -42,79 +47,74 @@
       cursor: pointer;
     }
 
+    .cart-icon {
+      font-size: 26px;
+      color: var(--primary-color);
+      position: relative;
+      cursor: pointer;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -10px;
+      background: red;
+      color: white;
+      border-radius: 50%;
+      font-size: 12px;
+      padding: 2px 6px;
+    }
+
     h1 {
-      color: var(--accent-color);
-      margin: 10px 0;
+      color: var(--primary-color);
+      text-align: center;
     }
 
-    .language-toggle {
-      margin-bottom: 15px;
+    .language-select {
+      margin: 0 auto;
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
     }
 
-    .language-toggle select {
-      padding: 6px 12px;
-      border-radius: 6px;
-      border: none;
-      font-weight: bold;
+    select {
+      padding: 5px;
+      border-radius: 5px;
+      background: #102334;
+      color: white;
+      border: 1px solid #444;
     }
 
-    .shop-container {
+    .bot-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      padding: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
     }
 
     .bot-card {
-      background-color: var(--card-bg);
-      padding: 20px;
-      border-radius: 12px;
-      text-align: center;
+      background: var(--card-bg);
+      padding: 1rem;
+      border-radius: 10px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.3);
     }
 
     .bot-card h3 {
-      margin: 10px 0;
+      margin-top: 0;
     }
 
-    .info-btn, .cart-btn {
-      background-color: #5865f2;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 14px;
-      margin: 5px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .cart-btn:hover {
-      background-color: #4752c4;
-    }
-
-    .cart-icon {
-      position: fixed;
-      top: 15px;
-      right: 15px;
+    .info-btn, .add-btn {
       background-color: var(--accent-color);
-      color: black;
-      padding: 10px;
-      border-radius: 50%;
-      font-weight: bold;
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      margin-top: 0.5rem;
       cursor: pointer;
-      z-index: 999;
     }
 
-    .cart-icon::after {
-      content: attr(data-count);
-      position: absolute;
-      top: -5px;
-      right: -5px;
-      background: red;
-      color: white;
-      font-size: 12px;
-      padding: 2px 6px;
-      border-radius: 50%;
+    .info-btn:hover, .add-btn:hover {
+      background-color: #4752c4;
     }
 
     .modal, .cart-modal {
@@ -122,7 +122,7 @@
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
+      background: rgba(0, 0, 0, 0.6);
       justify-content: center;
       align-items: center;
       z-index: 1000;
@@ -130,42 +130,47 @@
 
     .modal-content, .cart-content {
       background: var(--card-bg);
-      padding: 20px;
-      border-radius: 12px;
-      max-width: 400px;
+      padding: 1rem;
+      border-radius: 10px;
       width: 90%;
-      text-align: left;
+      max-width: 400px;
     }
 
     .close-btn {
       background: #ff4444;
       color: white;
+      padding: 0.5rem 1rem;
       border: none;
-      border-radius: 8px;
-      padding: 10px;
+      border-radius: 6px;
       cursor: pointer;
-      margin-top: 10px;
+      margin-top: 1rem;
     }
 
-    footer {
-      background: #000;
-      color: white;
-      padding: 20px;
+    .footer {
+      margin-top: 2rem;
+      padding: 1rem;
+      background-color: #0a1a2a;
       text-align: center;
-      margin-top: auto;
+      color: #ccc;
+      font-size: 14px;
     }
 
-    footer a {
-      color: var(--accent-color);
+    .footer a {
+      color: var(--primary-color);
       text-decoration: none;
-      font-weight: bold;
     }
 
-    .loader {
+    .trash {
+      cursor: pointer;
+      color: #ff4444;
+      font-weight: bold;
+      margin-left: 10px;
+    }
+
+    #loader {
       position: fixed;
       top: 0; left: 0;
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       background: var(--bg-color);
       display: flex;
       justify-content: center;
@@ -173,137 +178,31 @@
       z-index: 2000;
     }
 
-    .loader:after {
-      content: '';
-      width: 60px;
-      height: 60px;
-      border: 6px solid #fff;
-      border-top: 6px solid var(--accent-color);
+    .spinner {
+      border: 6px solid #ccc;
+      border-top: 6px solid var(--primary-color);
       border-radius: 50%;
+      width: 50px;
+      height: 50px;
       animation: spin 1s linear infinite;
     }
 
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
-
-    .trash-icon {
-      float: right;
-      cursor: pointer;
-      color: #ff4444;
-    }
-
-    @media (max-width: 500px) {
-      .bot-card {
-        font-size: 14px;
-      }
-    }
-  </style>
-</head>
+  </style></head>
 <body>
-
-<div class="loader" id="loader"></div>
-
-<header>
-  <a href="index.html"><img src="discordbot_logo.png" class="logo" alt="Logo" /></a>
-  <h1>🛍️ Shop onze Discord Bots</h1>
-  <div class="language-toggle">
-    <select id="languageSelect">
-      <option value="nl">🇳🇱 Nederlands</option>
-      <option value="en">🇬🇧 English</option>
+  <div class="topbar">
+    <img src="logo.png" class="logo" onclick="window.location.href='index.html'" alt="Logo">
+    <div class="cart-icon" onclick="toggleCart()">
+      🛒<span class="cart-count" id="cart-count">0</span>
+    </div>
+  </div>  <h1 id="page-title">Discord Bot Winkel</h1>  <div class="language-select">
+    <select id="language-select" onchange="changeLanguage()">
+      <option value="nl">Nederlands</option>
+      <option value="en">English</option>
     </select>
-  </div>
-</header>
-
-<div class="cart-icon" id="cartIcon" data-count="0">🛒</div>
-
-<div class="shop-container" id="botContainer"></div>
-
-<!-- Info Modal -->
-<div class="modal" id="infoModal">
-  <div class="modal-content" id="modalContent"></div>
-</div>
-
-<!-- Cart Modal -->
-<div class="cart-modal" id="cartModal">
-  <div class="cart-content">
-    <h2>🛒 Winkelwagen</h2>
-    <ul id="cartItems"></ul>
-    <button class="close-btn" onclick="closeCart()">Sluiten</button>
-  </div>
-</div>
-
-<footer>
-  📧 Email: support@discordbots.nl | 📞 Tel: 06-12345678 | <a href="https://discord.gg/XjZhuZNEHS" target="_blank">Discord</a>
-</footer>
-
-<script src="bots.js"></script>
-<script>
-  // Loader
-  window.addEventListener('load', () => {
-    document.getElementById('loader').style.display = 'none';
-  });
-
-  // Bot data
-  const container = document.getElementById('botContainer');
-  const modal = document.getElementById('infoModal');
-  const modalContent = document.getElementById('modalContent');
-  const cartIcon = document.getElementById('cartIcon');
-  const cartModal = document.getElementById('cartModal');
-  const cartItemsList = document.getElementById('cartItems');
-  let cart = [];
-
-  bots.forEach((bot, i) => {
-    const card = document.createElement('div');
-    card.className = 'bot-card';
-    card.innerHTML = `
-      <h3>${bot.emoji} ${bot.name}</h3>
-      <p>${bot.description}</p>
-      <strong>${bot.price}</strong><br>
-      <button class="info-btn" onclick="openModal('${bot.fullDescription}')">ℹ️ Info</button>
-      <button class="cart-btn" onclick="addToCart(${i})">🛒 Voeg toe</button>
-    `;
-    container.appendChild(card);
-  });
-
-  function openModal(text) {
-    modalContent.innerHTML = `<p>${text}</p><button class="close-btn" onclick="modal.style.display='none'">Sluiten</button>`;
-    modal.style.display = 'flex';
-  }
-
-  function addToCart(index) {
-    cart.push(bots[index]);
-    updateCart();
-  }
-
-  function updateCart() {
-    cartIcon.setAttribute('data-count', cart.length);
-    cartItemsList.innerHTML = '';
-    cart.forEach((item, i) => {
-      const li = document.createElement('li');
-      li.innerHTML = `${item.name} (${item.price}) <span class="trash-icon" onclick="removeFromCart(${i})">🗑️</span>`;
-      cartItemsList.appendChild(li);
-    });
-  }
-
-  function removeFromCart(index) {
-    cart.splice(index, 1);
-    updateCart();
-  }
-
-  cartIcon.addEventListener('click', () => {
-    cartModal.style.display = 'flex';
-  });
-
-  function closeCart() {
-    cartModal.style.display = 'none';
-  }
-
-  // Vertaalfunctie
-  const selectLang = document.getElementById('languageSelect');
-  selectLang.addEventListener('change', () => {
-    alert('Vertaling nog in ontwikkeling. Deze knop zal later de taal van de site aanpassen.');
-  });
-</script>
-</body>
+  </div>  <div id="bot-container" class="bot-container"></div>  <div class="footer">
+    📧 Email: info@discordbotsite.nl | ☎ Telefoon: +31 6 12345678 | <a href="https://discord.gg/XjZhuZNEHS" target="_blank">Discord</a>
+  </div>  <div id="loader"><div class="spinner"></div></div>  <script src="bots.js"></script>  <script src="shop.js"></script></body>
 </html>
