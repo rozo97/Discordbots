@@ -1,13 +1,20 @@
-<!DOCTYPE html><html lang="nl">
+<!DOCTYPE html>
+<html lang="nl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Discord Bot Winkel</title>  <!-- Google Analytics -->  <script async src="https://www.googletagmanager.com/gtag/js?id=G-THT0Z9KCPD"></script>  <script>
+  <title>Discord Bot Winkel</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-THT0Z9KCPD"></script>
+  <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-THT0Z9KCPD');
-  </script>  <style>
+  </script>
+
+  <style>
     :root {
       --primary-color: #ffc107;
       --bg-color: #071725;
@@ -68,21 +75,6 @@
     h1 {
       color: var(--primary-color);
       text-align: center;
-    }
-
-    .language-select {
-      margin: 0 auto;
-      margin-top: 10px;
-      display: flex;
-      justify-content: center;
-    }
-
-    select {
-      padding: 5px;
-      border-radius: 5px;
-      background: #102334;
-      color: white;
-      border: 1px solid #444;
     }
 
     .bot-container {
@@ -190,19 +182,143 @@
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
-  </style></head>
+
+    .lang-switch {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .lang-switch button {
+      background-color: var(--primary-color);
+      color: #000;
+      border: none;
+      padding: 0.4rem 1rem;
+      margin: 0 5px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
 <body>
+  <div id="loader">
+    <div class="spinner"></div>
+  </div>
+
   <div class="topbar">
-    <img src="logo.png" class="logo" onclick="window.location.href='index.html'" alt="Logo">
-    <div class="cart-icon" onclick="toggleCart()">
-      🛒<span class="cart-count" id="cart-count">0</span>
+    <img src="logo.png" alt="Logo" class="logo" onclick="window.location.href='index.html'"/>
+    <div class="cart-icon" onclick="toggleCart()">🛒<span class="cart-count" id="cartCount">0</span></div>
+  </div>
+
+  <h1 data-nl="Onze Discord Bots" data-en="Our Discord Bots">Onze Discord Bots</h1>
+
+  <div class="lang-switch">
+    <button onclick="setLang('nl')">🇳🇱 Nederlands</button>
+    <button onclick="setLang('en')">🇬🇧 English</button>
+  </div>
+
+  <div class="bot-container">
+    <div class="bot-card">
+      <h3 data-nl="🎫 Ticket Bot" data-en="🎫 Ticket Bot">🎫 Ticket Bot</h3>
+      <p data-nl="Maak eenvoudig support tickets." data-en="Easily create support tickets.">Maak eenvoudig support tickets.</p>
+      <button class="info-btn" onclick="showInfo('Ticket Bot', 'Gratis bot voor support tickets')">ℹ Info</button>
+      <button class="add-btn" onclick="addToCart('Ticket Bot')">🛒 Toevoegen</button>
     </div>
-  </div>  <h1 id="page-title">Discord Bot Winkel</h1>  <div class="language-select">
-    <select id="language-select" onchange="changeLanguage()">
-      <option value="nl">Nederlands</option>
-      <option value="en">English</option>
-    </select>
-  </div>  <div id="bot-container" class="bot-container"></div>  <div class="footer">
-    📧 Email: info@discordbotsite.nl | ☎ Telefoon: +31 6 12345678 | <a href="https://discord.gg/XjZhuZNEHS" target="_blank">Discord</a>
-  </div>  <div id="loader"><div class="spinner"></div></div>  <script src="bots.js"></script>  <script src="shop.js"></script></body>
+    <div class="bot-card">
+      <h3 data-nl="🎉 Giveaway Bot" data-en="🎉 Giveaway Bot">🎉 Giveaway Bot</h3>
+      <p data-nl="Organiseer giveaways op je server." data-en="Organize giveaways on your server.">Organiseer giveaways op je server.</p>
+      <button class="info-btn" onclick="showInfo('Giveaway Bot', 'Gratis bot voor giveaways')">ℹ Info</button>
+      <button class="add-btn" onclick="addToCart('Giveaway Bot')">🛒 Toevoegen</button>
+    </div>
+    <div class="bot-card">
+      <h3 data-nl="🏆 Level Bot" data-en="🏆 Level Bot">🏆 Level Bot</h3>
+      <p data-nl="Level systeem met XP." data-en="Level system with XP.">Level systeem met XP.</p>
+      <button class="info-btn" onclick="showInfo('Level Bot', 'Bot met XP & ranks (€5)')">ℹ Info</button>
+      <button class="add-btn" onclick="addToCart('Level Bot')">🛒 Toevoegen</button>
+    </div>
+    <div class="bot-card">
+      <h3 data-nl="⚙️ Custom Bot" data-en="⚙️ Custom Bot">⚙️ Custom Bot</h3>
+      <p data-nl="Bot op maat, vanaf €10." data-en="Custom bot, from €10.">Bot op maat, vanaf €10.</p>
+      <button class="info-btn" onclick="showInfo('Custom Bot', '1 commando: €10-50, 10-20: €100-200')">ℹ Info</button>
+      <button class="add-btn" onclick="addToCart('Custom Bot')">🛒 Toevoegen</button>
+    </div>
+  </div>
+
+  <div class="modal" id="infoModal">
+    <div class="modal-content">
+      <h3 id="modalTitle"></h3>
+      <p id="modalText"></p>
+      <button class="close-btn" onclick="closeInfo()">Sluiten</button>
+    </div>
+  </div>
+
+  <div class="cart-modal" id="cartModal">
+    <div class="cart-content">
+      <h3>🛒 Winkelwagen</h3>
+      <ul id="cartItems"></ul>
+      <button class="close-btn" onclick="toggleCart()">Sluiten</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>Email: info@discordbotsite.nl | Tel: 0612345678 | <a href="https://discord.gg/XjZhuZNEHS" target="_blank">Discord</a></p>
+  </div>
+
+  <script>
+    // Loader verwijderen na laden
+    window.addEventListener('load', () => {
+      const loader = document.getElementById('loader');
+      if (loader) loader.style.display = 'none';
+    });
+
+    // Modal logica
+    function showInfo(title, text) {
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalText').textContent = text;
+      document.getElementById('infoModal').style.display = 'flex';
+    }
+
+    function closeInfo() {
+      document.getElementById('infoModal').style.display = 'none';
+    }
+
+    // Winkelwagen
+    const cart = [];
+
+    function addToCart(item) {
+      cart.push(item);
+      updateCart();
+    }
+
+    function updateCart() {
+      document.getElementById('cartCount').textContent = cart.length;
+      const cartList = document.getElementById('cartItems');
+      cartList.innerHTML = '';
+      cart.forEach((item, index) => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        const remove = document.createElement('span');
+        remove.textContent = '🗑️';
+        remove.classList.add('trash');
+        remove.onclick = () => {
+          cart.splice(index, 1);
+          updateCart();
+        };
+        li.appendChild(remove);
+        cartList.appendChild(li);
+      });
+    }
+
+    function toggleCart() {
+      const modal = document.getElementById('cartModal');
+      modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    // Taalwisseling
+    function setLang(lang) {
+      document.querySelectorAll('[data-nl]').forEach(el => {
+        el.textContent = lang === 'nl' ? el.getAttribute('data-nl') : el.getAttribute('data-en');
+      });
+    }
+  </script>
+</body>
 </html>
